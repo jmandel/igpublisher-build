@@ -1,0 +1,6 @@
+[submodule "org.hl7.fhir.core"]
+	path = org.hl7.fhir.core
+	url = https://github.com/hapifhir/org.hl7.fhir.core.git
+[submodule "fhir-ig-publisher"]
+	path = fhir-ig-publisher
+	url = https://github.com/HL7/fhir-ig-publisher.git
