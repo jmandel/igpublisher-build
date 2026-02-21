@@ -65,22 +65,22 @@ Optimized runs are also more consistent (4s variance vs 17s upstream).
 
 ### FHIR Core (8 files changed)
 
-| File | Change |
-|------|--------|
-| `CanonicalResourceManager.java` | `drop()`: added reverse index for O(1) key removal instead of scanning the entire map. `getList()`: use `IdentityHashMap` for O(n) deduplication instead of `List.contains()` which was O(n²). Reuse a single `MetadataResourceVersionComparator` instance instead of allocating one per `see()` call. |
-| `FHIRPathEngine.java` | Cache `allTypes` and `primitiveTypes` in a static `WeakHashMap` keyed by `IWorkerContext`. Previously every `new FHIRPathEngine()` iterated all StructureDefinitions to rebuild these. |
-| `XhtmlParser.java` | Make `elements`, `attributes`, and `definedEntities` maps `static final`. Previously rebuilt on every parser instantiation. |
-| `SimpleWorkerContext.java` | Cache the result of `getResourceNames()` (lazy-init, `volatile`). Previously rebuilt the list on every call. |
-| `TerminologyCache.java` | Instead of rewriting the entire cache file to disk after every single terminology lookup, mark caches as dirty and flush every 5 seconds. A shutdown hook ensures nothing is lost. On cold caches this was the dominant cost — writing files of size 1, 2, 3, ... N entries is O(n²) I/O. |
-| `SemverParser.java` | Cache `parseSemver()` results in a `ConcurrentHashMap`. Called frequently from version comparison code. |
-| `NpmPackageIndexBuilder.java` | Share a single static `JsonFactory` instance instead of creating one per use. |
+| File | Change | PR |
+|------|--------|----|
+| `CanonicalResourceManager.java` | `drop()`: added reverse index for O(1) key removal instead of scanning the entire map. `getList()`: use `IdentityHashMap` for O(n) deduplication instead of `List.contains()` which was O(n²). Reuse a single `MetadataResourceVersionComparator` instance instead of allocating one per `see()` call. | [#2322](https://github.com/hapifhir/org.hl7.fhir.core/pull/2322) |
+| `FHIRPathEngine.java` | Cache `allTypes` and `primitiveTypes` in a static `WeakHashMap` keyed by `IWorkerContext`. Previously every `new FHIRPathEngine()` iterated all StructureDefinitions to rebuild these. | [#2323](https://github.com/hapifhir/org.hl7.fhir.core/pull/2323) |
+| `XhtmlParser.java` | Make `elements`, `attributes`, and `definedEntities` maps `static final`. Previously rebuilt on every parser instantiation. | [#2324](https://github.com/hapifhir/org.hl7.fhir.core/pull/2324) |
+| `SimpleWorkerContext.java` | Cache the result of `getResourceNames()` (lazy-init, `volatile`). Previously rebuilt the list on every call. | [#2325](https://github.com/hapifhir/org.hl7.fhir.core/pull/2325) |
+| `TerminologyCache.java` | Instead of rewriting the entire cache file to disk after every single terminology lookup, mark caches as dirty and flush every 5 seconds. A shutdown hook ensures nothing is lost. On cold caches this was the dominant cost — writing files of size 1, 2, 3, ... N entries is O(n²) I/O. | [#2326](https://github.com/hapifhir/org.hl7.fhir.core/pull/2326) |
+| `SemverParser.java` | Cache `parseSemver()` results in a `ConcurrentHashMap`. Called frequently from version comparison code. | [#2325](https://github.com/hapifhir/org.hl7.fhir.core/pull/2325) |
+| `NpmPackageIndexBuilder.java` | Share a single static `JsonFactory` instance instead of creating one per use. | [#2325](https://github.com/hapifhir/org.hl7.fhir.core/pull/2325) |
 
 ### IG Publisher (2 files changed)
 
-| File | Change |
-|------|--------|
-| `ValidationServices.java` | Cache NamingSystem URLs in a `HashSet` for O(1) lookup in `resolveURL()`, instead of iterating all NamingSystems each time. |
-| `PublisherGenerator.java` | Send usage statistics via a daemon thread instead of blocking. |
+| File | Change | PR |
+|------|--------|----|
+| `ValidationServices.java` | Cache NamingSystem URLs in a `HashSet` for O(1) lookup in `resolveURL()`, instead of iterating all NamingSystems each time. | [#1254](https://github.com/HL7/fhir-ig-publisher/pull/1254) |
+| `PublisherGenerator.java` | Send usage statistics via a daemon thread instead of blocking. | [#1254](https://github.com/HL7/fhir-ig-publisher/pull/1254) |
 
 ## Profiling Methodology
 
