@@ -11,8 +11,8 @@ Build the [HL7 FHIR IG Publisher](https://github.com/HL7/fhir-ig-publisher) from
 
 ```bash
 # Clone with submodules
-git clone --recurse-submodules https://github.com/jmandel/igpublisher.git
-cd igpublisher
+git clone --recurse-submodules https://github.com/jmandel/igpublisher-perf.git
+cd igpublisher-perf
 
 # Build everything (FHIR Core → IG Publisher)
 ./rebuild.sh
